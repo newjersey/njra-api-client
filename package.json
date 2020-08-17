@@ -1,0 +1,19 @@
+{
+  "name": "njra-api-client",
+  "version": "1.0.0",
+  "description": "Node-based client for NJRA's Seamless Docs API.",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/newjersey/njra-api-client.git"
+  },
+  "author": "Ross Dakin",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/newjersey/njra-api-client/issues"
+  },
+  "homepage": "https://github.com/newjersey/njra-api-client#readme"
+}
