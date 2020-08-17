@@ -4,6 +4,7 @@
   "description": "Node-based client for NJRA's Seamless Docs API.",
   "main": "index.js",
   "scripts": {
+    "start": "ts-node ./src/index.ts",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "repository": {
@@ -15,5 +16,13 @@
   "bugs": {
     "url": "https://github.com/newjersey/njra-api-client/issues"
   },
-  "homepage": "https://github.com/newjersey/njra-api-client#readme"
+  "homepage": "https://github.com/newjersey/njra-api-client#readme",
+  "dependencies": {
+    "got": "^11.5.2"
+  },
+  "devDependencies": {
+    "@types/node": "^14.0.27",
+    "ts-node": "^8.10.2",
+    "typescript": "^3.9.7"
+  }
 }
