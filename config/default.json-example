@@ -1,0 +1,9 @@
+{
+  "seamless": {
+    "formId": "Cxxxxxxxxxxxxxxxxxx",
+    "api": {
+      "key": "xxxxxxxxxxxxxxx",
+      "secret": "xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx"
+    }
+  }
+}

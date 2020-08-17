@@ -20,6 +20,9 @@
   },
   "homepage": "https://github.com/newjersey/njra-api-client#readme",
   "dependencies": {
+    "@types/config": "0.0.36",
+    "config": "^3.3.1",
+    "crypto-random-string": "^3.2.0",
     "got": "^11.5.2"
   },
   "devDependencies": {
