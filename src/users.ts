@@ -12,16 +12,28 @@ export enum USER_IDS {
   Jarrett = 'BU20081000171006577',
   Jackie = 'BU20081000171006503',
   Ashley = 'BU20081000173096307',
+  Cecily = 'BU20081000173559642',
+  Ramona = 'BU20081000173559868',
 }
 
 export const RECEIVERS = [USER_IDS.Jackie, USER_IDS.Jarrett, USER_IDS.Diana];
 export const REVIEWERS = [USER_IDS.Darryl, USER_IDS.Jennell];
+export const ELIGIBILITY_REVIEWERS = [USER_IDS.Sharon, USER_IDS.Elly];
 
 let receiverIndex = 0;
 export function getReceiver(): USER_IDS {
-  const receiver = RECEIVERS[receiverIndex];
+  const user = RECEIVERS[receiverIndex];
 
   receiverIndex = (receiverIndex + 1) % RECEIVERS.length;
 
-  return receiver;
+  return user;
+}
+
+let eligibilityReviewerIndex = 0;
+export function getEligibilityReviewer(): USER_IDS {
+  const user = ELIGIBILITY_REVIEWERS[eligibilityReviewerIndex];
+
+  eligibilityReviewerIndex = (eligibilityReviewerIndex + 1) % ELIGIBILITY_REVIEWERS.length;
+
+  return user;
 }

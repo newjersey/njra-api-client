@@ -6,7 +6,7 @@ import { eligibleAddress } from './geography';
 interface Ineligibility {
   trigger(application: Application, eins?: Set<string>): boolean;
   tagName: string;
-  severity: 'Decline' | 'Review';
+  severity: 'Decline' | 'Review' | 'Eligibility Review';
 }
 
 export const INELIGIBILITIES: Ineligibility[] = [
@@ -25,7 +25,7 @@ export const INELIGIBILITIES: Ineligibility[] = [
     trigger: (app: Application): boolean =>
       parseInt(app.application_data.input_DIBnt4.raw_value?.replace(/\D/, '')) > 5000,
     tagName: 'Property Too Large',
-    severity: 'Decline',
+    severity: 'Eligibility Review',
   },
   {
     trigger: (app: Application): boolean =>
@@ -44,7 +44,7 @@ export const INELIGIBILITIES: Ineligibility[] = [
         })
       ),
     tagName: 'Lease Expired',
-    severity: 'Decline',
+    severity: 'Eligibility Review',
   },
   {
     trigger: (app: Application): boolean => !eligibleAddress(app.application_data.grp_OaJ6rc),

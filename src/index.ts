@@ -11,7 +11,7 @@ import Pipeline, { Application } from './Pipeline';
 import config from 'config';
 import { request } from './documented';
 import { Response } from 'node-fetch';
-import { getReceiver, RECEIVERS, USER_IDS, REVIEWERS } from './users';
+import { getEligibilityReviewer, getReceiver, RECEIVERS, REVIEWERS, ELIGIBILITY_REVIEWERS } from './users';
 import { INELIGIBILITIES } from './ineligibility';
 
 const START = 0;
@@ -31,10 +31,12 @@ async function processApplication(application: Application): Promise<Response[]>
   await Promise.all([
     unassignSubmission(application.application_id, RECEIVERS),
     // unassignSubmission(application.application_id, REVIEWERS), // causes a 500 error, but don't need since they're not randomly assigned
-    disassociateStage(application.application_id, 'Ineligible'),
-    disassociateStage(application.application_id, 'Additional Review'),
+    // unassignSubmission(application.application_id, ELIGIBILITY_REVIEWERS), // also causes a 500 error, don't know why
     disassociateStage(application.application_id, 'Received'),
     disassociateStage(application.application_id, 'Lease Review'),
+    disassociateStage(application.application_id, 'Eligibility Review'),
+    disassociateStage(application.application_id, 'Additional Review'),
+    disassociateStage(application.application_id, 'Ineligible'),
     disassociateTags(
       application.application_id,
       INELIGIBILITIES.map((i) => i.tagName)
@@ -55,6 +57,10 @@ async function processApplication(application: Application): Promise<Response[]>
   if (tags.filter((ineligibility) => ineligibility.severity === 'Decline').length) {
     // Decline
     promises.push(associateStage(application.application_id, 'Ineligible'));
+  } else if (tags.filter((ineligibility) => ineligibility.severity === 'Eligibility Review').length) {
+    // Eligibility Review
+    promises.push(associateStage(application.application_id, 'Eligibility Review'));
+    promises.push(assignSubmission(application.application_id, [getEligibilityReviewer()]));
   } else if (tags.filter((ineligibility) => ineligibility.severity === 'Review').length) {
     // Review
     promises.push(associateStage(application.application_id, 'Additional Review'));
