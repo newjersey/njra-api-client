@@ -11,7 +11,7 @@ import Pipeline, { Application } from './Pipeline';
 import config from 'config';
 import { request } from './documented';
 import { Response } from 'node-fetch';
-import { getEligibilityReviewer, getReceiver, RECEIVERS, REVIEWERS, ELIGIBILITY_REVIEWERS } from './users';
+import { getEligibilityReviewer, getReceiver, RECEIVERS, REVIEWERS } from './users';
 import { INELIGIBILITIES } from './ineligibility';
 
 const START = 0;
@@ -60,7 +60,7 @@ async function processApplication(application: Application): Promise<Response[]>
   } else if (tags.filter((ineligibility) => ineligibility.severity === 'Eligibility Review').length) {
     // Eligibility Review
     promises.push(associateStage(application.application_id, 'Eligibility Review'));
-    promises.push(assignSubmission(application.application_id, [getEligibilityReviewer()]));
+    promises.push(assignSubmission(application.application_id, [getEligibilityReviewer(), getReceiver()]));
   } else if (tags.filter((ineligibility) => ineligibility.severity === 'Review').length) {
     // Review
     promises.push(associateStage(application.application_id, 'Additional Review'));
