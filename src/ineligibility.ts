@@ -23,7 +23,7 @@ export const INELIGIBILITIES: Ineligibility[] = [
   },
   {
     trigger: (app: Application): boolean =>
-      parseInt(app.application_data.input_DIBnt4.raw_value.replace(/\D/, '')) > 5000,
+      parseInt(app.application_data.input_DIBnt4.raw_value?.replace(/\D/, '')) > 5000,
     tagName: 'Property Too Large',
     severity: 'Decline',
   },
