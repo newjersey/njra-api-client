@@ -2,8 +2,15 @@
   "seamless": {
     "formId": "Cxxxxxxxxxxxxxxxxxx",
     "api": {
-      "key": "xxxxxxxxxxxxxxx",
-      "secret": "xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx"
+      "documented": {
+        "key": "xxxxxxxxxxxxxxx",
+        "secret": "xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx"
+      },
+      "undocumented": {
+        "uid": "xxxxxxxxxxxxxxxxxxx",
+        "maid": "xxxxxxxxxxxxxxxxxxx",
+        "token": "[LONG STRING -- OBTAIN BY INSPECTING A BROWSER-BASED XHR REQUEST]"
+      }
     }
   }
 }

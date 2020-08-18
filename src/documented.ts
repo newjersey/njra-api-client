@@ -1,10 +1,12 @@
+/* Method for interacting with documented API. */
+
 import got, { Response } from 'got';
 
 import config from 'config';
 import crypto from 'crypto';
 import cryptoRandomString from 'crypto-random-string';
 
-type method =
+type Method =
   | 'get'
   | 'post'
   | 'put'
@@ -23,18 +25,18 @@ type method =
   | 'trace'
   | undefined;
 
-const key: string = config.get('seamless.api.key');
-const secret: string = config.get('seamless.api.secret');
+const KEY: string = config.get('seamless.api.documented.key');
+const SECRET: string = config.get('seamless.api.documented.secret');
 
-const makeAuthHeader = (uri: string, method: method, timestamp: string) => {
+const makeAuthHeader = (uri: string, method: Method, timestamp: string) => {
   const nonce = cryptoRandomString({ length: 10, type: 'base64' });
   const signatureBase = `${method}+/${uri}+${timestamp}+${nonce}`;
-  const signature = crypto.createHmac('sha256', secret).update(signatureBase).digest('hex');
+  const signature = crypto.createHmac('sha256', SECRET).update(signatureBase).digest('hex');
 
-  return `api_key=${key} nonce=${nonce} signature=${signature}`;
+  return `api_key=${KEY} nonce=${nonce} signature=${signature}`;
 };
 
-export default async function makeRequest(method: method, uri: string): Promise<Response> {
+export async function request(method: Method, uri: string, json?: Record<string, unknown>): Promise<Response> {
   const timestamp = `${Math.floor(Date.now() / 1000)}`;
 
   try {
@@ -45,8 +47,10 @@ export default async function makeRequest(method: method, uri: string): Promise<
         Authorization: makeAuthHeader(uri, method, timestamp),
         'user-agent': 'NJRA API Client (https://github.com/newjersey/njra-api-client)',
       },
+      json,
       method,
       prefixUrl: 'https://njra.seamlessdocs.com/api',
+      responseType: 'json',
     });
   } catch (error) {
     console.log(error.response.statusCode, error.response.body);
