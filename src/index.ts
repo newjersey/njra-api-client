@@ -15,14 +15,17 @@ import { getEligibilityReviewer, getReceiver, RECEIVERS, REVIEWERS } from './use
 import { INELIGIBILITIES } from './ineligibility';
 
 const START = 0;
+const LIMIT = 1000; // max count, not max ID
 const FORM_ID: string = config.get('seamless.formId');
+
 const eins: Set<string> = new Set();
-let count = START;
+let count = 0;
+let n = START;
 
 async function processApplication(application: Application): Promise<Response[]> {
   const promises: Promise<Response>[] = [];
 
-  console.log(count++);
+  console.log(`${++count} (#${n++})`);
 
   // determine eligibility
   const tags = INELIGIBILITIES.filter((ineligibility) => ineligibility.trigger(application, eins));
@@ -85,6 +88,10 @@ async function processBatch(offset: number): Promise<number> {
   const { items } = pipeline;
 
   for (let i = 0; i < items.length; i++) {
+    if (count >= LIMIT) {
+      return 0;
+    }
+
     await processApplication(items[i]);
   }
 
@@ -97,7 +104,7 @@ async function main(): Promise<void> {
 
   try {
     do {
-      console.log(`\nProcessing batch starting at ${offset}...`);
+      console.log(`\nProcessing batch of ${LIMIT} starting at ${offset}...`);
       const n = await processBatch(offset);
       offset += n;
       isComplete = n === 0;
