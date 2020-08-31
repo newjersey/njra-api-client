@@ -3,9 +3,7 @@ export enum USER_IDS {
   Jennell = 'BU20081000171005582',
   Dawn = 'BU20071000167494399',
   Oscar = 'BU20081000171006060',
-  Elly = 'BU20081000171005970',
   Diana = 'BU20081000171006343',
-  Sharon = 'BU20081000171005904',
   Darryl = 'BU20081000171005812',
   Kim = 'BU20081000171005764',
   Leslie = 'BU20081000171005690',
@@ -13,12 +11,11 @@ export enum USER_IDS {
   Jackie = 'BU20081000171006503',
   Ashley = 'BU20081000173096307',
   Cecily = 'BU20081000173559642',
-  Ramona = 'BU20081000173559868',
 }
 
 export const RECEIVERS = [USER_IDS.Jackie, USER_IDS.Jarrett, USER_IDS.Diana];
 export const REVIEWERS = [USER_IDS.Darryl, USER_IDS.Jennell];
-export const ELIGIBILITY_REVIEWERS = [USER_IDS.Sharon, USER_IDS.Elly];
+export const ELIGIBILITY_REVIEWERS = [USER_IDS.Jennell, USER_IDS.Dawn];
 
 let receiverIndex = 0;
 export function getReceiver(): USER_IDS {
