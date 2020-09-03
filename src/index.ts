@@ -11,7 +11,7 @@ import Pipeline, { Application } from './Pipeline';
 import config from 'config';
 import { request } from './documented';
 import { Response } from 'node-fetch';
-import { getEligibilityReviewer, getReceiver, RECEIVERS, REVIEWERS } from './users';
+import { getEligibilityReviewer, getReceiver, REVIEWERS, OLD_RECEIVERS, OLD_ELIGIBILITY_REVIEWERS } from './users';
 import { INELIGIBILITIES } from './ineligibility';
 
 const START = 1000;
@@ -32,9 +32,9 @@ async function processApplication(application: Application): Promise<Response[]>
 
   // clear existing data
   await Promise.all([
-    unassignSubmission(application.application_id, RECEIVERS),
+    unassignSubmission(application.application_id, OLD_RECEIVERS),
     // unassignSubmission(application.application_id, REVIEWERS), // causes a 500 error, but don't need since they're not randomly assigned
-    // unassignSubmission(application.application_id, ELIGIBILITY_REVIEWERS), // also causes a 500 error, don't know why
+    unassignSubmission(application.application_id, OLD_ELIGIBILITY_REVIEWERS), // also causes a 500 error, don't know why
     disassociateStage(application.application_id, 'Received'),
     disassociateStage(application.application_id, 'Lease Review'),
     disassociateStage(application.application_id, 'Eligibility Review'),

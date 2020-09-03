@@ -9,14 +9,19 @@ export enum USER_IDS {
   Jackie = 'BU20081000171006503',
   Ashley = 'BU20081000173096307',
   Cecily = 'BU20081000173559642',
+  Jarrett = 'BU20081000171006577',
   Kayla = 'BU20081000173559868',
   Angela = 'BU20081000171005904',
   Janet = 'BU20081000171005970',
 }
 
+export const OLD_RECEIVERS = [USER_IDS.Jackie, USER_IDS.Diana, USER_IDS.Jarrett];
 export const RECEIVERS = [USER_IDS.Jackie, USER_IDS.Diana, USER_IDS.Kayla, USER_IDS.Angela];
+
 export const REVIEWERS = [USER_IDS.Darryl, USER_IDS.Jennell];
-export const ELIGIBILITY_REVIEWERS = [USER_IDS.Jennell, USER_IDS.Dawn];
+
+export const OLD_ELIGIBILITY_REVIEWERS = [USER_IDS.Jennell, USER_IDS.Dawn, USER_IDS.Janet];
+export const ELIGIBILITY_REVIEWERS = [USER_IDS.Janet];
 
 let receiverIndex = 0;
 export function getReceiver(): USER_IDS {
