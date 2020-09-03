@@ -14,8 +14,8 @@ import { Response } from 'node-fetch';
 import { getEligibilityReviewer, getReceiver, RECEIVERS, REVIEWERS } from './users';
 import { INELIGIBILITIES } from './ineligibility';
 
-const START = 0;
-const LIMIT = 1000; // max count, not max ID
+const START = 1000;
+const LIMIT = 2000; // max count, not max ID
 const FORM_ID: string = config.get('seamless.formId');
 
 const eins: Set<string> = new Set();
