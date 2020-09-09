@@ -3,7 +3,6 @@ import pluralize from 'pluralize';
 import { request } from './documented';
 import { getApplication } from './application';
 import { getSubmissionData } from './submission';
-import { Body } from 'node-fetch';
 
 const FORM_ID: string = config.get('seamless.projectSummaryFormId');
 
