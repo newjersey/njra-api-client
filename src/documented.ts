@@ -3,8 +3,8 @@
 import got, { Response } from 'got';
 
 import config from 'config';
-import * as crypto from 'crypto';
-import cryptoRandomString from 'crypto-random-string';
+import crypto = require('crypto');
+import cryptoRandomString = require('crypto-random-string');
 
 type Method =
   | 'get'
