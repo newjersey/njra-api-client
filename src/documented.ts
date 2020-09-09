@@ -3,7 +3,7 @@
 import got, { Response } from 'got';
 
 import config from 'config';
-import crypto from 'crypto';
+import * as crypto from 'crypto';
 import cryptoRandomString from 'crypto-random-string';
 
 type Method =
