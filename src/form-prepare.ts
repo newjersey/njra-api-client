@@ -41,7 +41,7 @@ async function getRecipients(formId: string): Promise<Recipients> {
   const signers = await getSigners(formId);
   const signer = signers[0];
   const listEntries = signer.known_list.split('\n');
-  const [fullname, email] = listEntries[2].split(', ');
+  const [fullname, email] = listEntries[0].split(', ');
 
   // could round-robin among the listEntries rather than just using the first
   return {
