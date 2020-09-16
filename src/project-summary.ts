@@ -115,3 +115,15 @@ export async function prepare(
 
   return dataMess;
 }
+
+// async function main() {
+//   const responseBody = await prepare({
+//     applicationId: '',
+//     landlortCertId: '',
+//     landlortCertRef: '',
+//     tenantGrantAgreementId: '',
+//     tenantGrantAgreementRef: '',
+//   });
+// }
+
+// main();

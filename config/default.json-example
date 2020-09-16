@@ -1,6 +1,7 @@
 {
   "seamless": {
     "formId": "Cxxxxxxxxxxxxxxxxxx",
+    "projectSummaryFlowUrl": "[GET URL FROM POWER AUTOMATE FLOW]",
     "api": {
       "documented": {
         "key": "xxxxxxxxxxxxxxx",
