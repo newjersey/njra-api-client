@@ -1,0 +1,1 @@
+declare module 'countapi-js';

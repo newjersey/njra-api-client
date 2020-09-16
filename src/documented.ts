@@ -53,7 +53,8 @@ export async function request(method: Method, uri: string, json?: Record<string,
       responseType: 'json',
     });
   } catch (error) {
-    console.log(error.response.statusCode, error.response.body);
+    console.log(error);
+    console.log(error.response?.statusCode, error.response?.body);
     console.log(error.request);
     return Promise.reject(error);
   }
