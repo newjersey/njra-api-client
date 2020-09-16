@@ -84,7 +84,13 @@ interface PrepareResponse {
   response: ResponseBodySuccess;
 }
 
-export async function prepare(params: PrepareParams) {
+export async function prepare(
+  params: PrepareParams
+): Promise<{
+  data: OptionalData;
+  grantId: string;
+  inviteUrl: string;
+}> {
   const data = await getOptionalData(params);
   const response = await prepareForm(FORM_ID, data);
   const { application_id: grantId } = response;
@@ -109,16 +115,3 @@ export async function prepare(params: PrepareParams) {
 
   return dataMess;
 }
-
-async function main() {
-  await prepare({
-    applicationId: '',
-    landlortCertId: '',
-    landlortCertRef: '',
-    tenantGrantAgreementId: '',
-    tenantGrantAgreementRef: '',
-    refsOnly: false,
-  });
-}
-
-main();
