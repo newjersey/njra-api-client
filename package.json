@@ -4,6 +4,7 @@
   "description": "Node-based client for NJRA's Seamless Docs API.",
   "main": "dist/index.js",
   "types": "dist/index.d.ts",
+  "prepublish": "tsc",
   "scripts": {
     "build": "tsc",
     "lint": "eslint . --ext .ts",
