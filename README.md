@@ -1,8 +1,4 @@
 # NJRA API Client
 Node-based client for NJRA's Seamless Docs API.
 
-## Dev
-
-`npm install`
-
-`npm start`
+Run `npm run build` before pushing to GitHub.
