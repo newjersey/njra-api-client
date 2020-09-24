@@ -1,3 +1,4 @@
+import config from 'config';
 import { request } from './documented';
 
 interface Signer {
@@ -30,8 +31,8 @@ interface ResponseBodyFailure {
 
 type ResponseBody = ResponseBodySuccess | ResponseBodyFailure;
 
-export async function getSigners(formId: string): Promise<ResponseBodySuccess> {
-  const { body } = await request('GET', `form/${formId}/signers`);
+export async function getSigners(apiKey: string, apiSecret: string, formId: string): Promise<ResponseBodySuccess> {
+  const { body } = await request(apiKey, apiSecret, 'GET', `form/${formId}/signers`);
 
   if (!Array.isArray(body)) {
     throw new Error(JSON.stringify((body as ResponseBodyFailure).error_log));

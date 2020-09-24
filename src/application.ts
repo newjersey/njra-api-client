@@ -38,8 +38,8 @@ export interface Application {
   is_incomplete: null;
 }
 
-export async function getApplication(applicationId: string): Promise<Application> {
-  const { body } = await request('POST', `application/${applicationId}`);
+export async function getApplication(apiKey: string, apiSecret: string, applicationId: string): Promise<Application> {
+  const { body } = await request(apiKey, apiSecret, 'POST', `application/${applicationId}`);
 
   return body as Application;
 }

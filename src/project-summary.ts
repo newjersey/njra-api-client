@@ -1,4 +1,4 @@
-import config from 'config';
+// import config from 'config';
 import countapi from 'countapi-js';
 import got from 'got';
 import pluralize from 'pluralize';
@@ -6,9 +6,6 @@ import { request } from './documented';
 import { getApplication } from './application';
 import { getSubmissionData } from './submission';
 import { prepareForm, ResponseBodySuccess } from './form-prepare';
-
-const FORM_ID: string = config.get('seamless.projectSummaryFormId');
-const FLOW_URL: string = config.get('seamless.projectSummaryFlowUrl');
 
 interface PrepareParams {
   applicationId: string;
@@ -43,7 +40,7 @@ interface OptionalDataExtended extends OptionalDataRefs {
 
 type OptionalData = OptionalDataRefs | OptionalDataExtended;
 
-async function getOptionalData(params: PrepareParams): Promise<OptionalData> {
+async function getOptionalData(apiKey: string, apiSecret: string, params: PrepareParams): Promise<OptionalData> {
   const refs = {
     SBLEAGP_PJS_GrantNumber: 'SBL-EAGP-' + `${(await countapi.event('njra_project_summary')).value}`.padStart(5, '0'),
     SBLEAGP_PJS_ApplicationID: params.applicationId,
@@ -57,7 +54,7 @@ async function getOptionalData(params: PrepareParams): Promise<OptionalData> {
     return refs;
   }
 
-  const application = await getApplication(params.applicationId);
+  const application = await getApplication(apiKey, apiSecret, params.applicationId);
   const submissionData = getSubmissionData(application);
 
   return {
@@ -85,16 +82,21 @@ interface PrepareResponse {
 }
 
 export async function prepare(
-  params: PrepareParams
+  params: PrepareParams,
+  formId: string,
+  formUrl: string,
+  apiKey: string,
+  apiSecret: string
 ): Promise<{
   data: OptionalData;
   grantId: string;
   inviteUrl: string;
 }> {
-  const data = await getOptionalData(params);
-  const response = await prepareForm(FORM_ID, data);
+  const data = await getOptionalData(apiKey, apiSecret, params);
+  const response = await prepareForm(apiKey, apiSecret, formId, data);
   const { application_id: grantId } = response;
-  const [inviteUrl] = (await request('POST', `application/${grantId}/get_invite_url`)).body as string[];
+  const [inviteUrl] = (await request(apiKey, apiSecret, 'POST', `application/${grantId}/get_invite_url`))
+    .body as string[];
 
   console.log(response);
   console.log(`Invite URL for grant ${grantId}:`, inviteUrl);
@@ -103,7 +105,7 @@ export async function prepare(
   // console.log(
   //   `Inviting next signer for grant ${grantId}:`,
   //   (
-  //     await request('POST', `application/${grantId}/invite_next_signer`, {
+  //     await request(apiKey, spiSecret, 'POST', `application/${grantId}/invite_next_signer`, {
   //       email_index: 0,
   //     })
   //   ).body
@@ -111,19 +113,30 @@ export async function prepare(
 
   const dataMess = { data, grantId, inviteUrl };
 
-  await got.post(FLOW_URL, { json: dataMess });
+  await got.post(formUrl, { json: dataMess });
 
   return dataMess;
 }
 
 // async function main() {
-//   const responseBody = await prepare({
-//     applicationId: '',
-//     landlortCertId: '',
-//     landlortCertRef: '',
-//     tenantGrantAgreementId: '',
-//     tenantGrantAgreementRef: '',
-//   });
+//   const FORM_ID: string = config.get('seamless.projectSummaryFormId');
+//   const FLOW_URL: string = config.get('seamless.projectSummaryFlowUrl');
+//   const API_KEY: string = config.get('seamless.api.documented.key');
+//   const API_SECRET: string = config.get('seamless.api.documented.secret');
+
+//   const responseBody = await prepare(
+//     {
+//       applicationId: '',
+//       landlortCertId: '',
+//       landlortCertRef: '',
+//       tenantGrantAgreementId: '',
+//       tenantGrantAgreementRef: '',
+//     },
+//     FORM_ID,
+//     FLOW_URL,
+//     API_KEY,
+//     API_SECRET,
+//   );
 // }
 
 // main();

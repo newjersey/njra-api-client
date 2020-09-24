@@ -1,3 +1,4 @@
+import config from 'config';
 import { request } from './documented';
 import { getSigners } from './form-signers';
 
@@ -37,8 +38,8 @@ interface ResponseBodyFailure extends ResponseBodyBase {
 
 type ResponseBody = ResponseBodySuccess | ResponseBodyFailure;
 
-async function getRecipients(formId: string): Promise<Recipients> {
-  const signers = await getSigners(formId);
+async function getRecipients(apiKey: string, apiSecret: string, formId: string): Promise<Recipients> {
+  const signers = await getSigners(apiKey, apiSecret, formId);
   const signer = signers[0];
   const listEntries = signer.known_list.split('\n');
   const [fullname, email] = listEntries[0].split(', ');
@@ -52,9 +53,14 @@ async function getRecipients(formId: string): Promise<Recipients> {
   };
 }
 
-export async function prepareForm(formId: string, optionalData = {}): Promise<ResponseBodySuccess> {
+export async function prepareForm(
+  apiKey: string,
+  apiSecret: string,
+  formId: string,
+  optionalData = {}
+): Promise<ResponseBodySuccess> {
   const requiredData: RequiredData = {
-    recipients: await getRecipients(formId),
+    recipients: await getRecipients(apiKey, apiSecret, formId),
     signer_data: {
       fullname: 'NJRA',
       email: 'sbleagp@njra.us',
@@ -65,7 +71,7 @@ export async function prepareForm(formId: string, optionalData = {}): Promise<Re
 
   console.log('Preparing a new form from data:', data);
 
-  const { body } = await request('POST', `form/${formId}/prepare`, data);
+  const { body } = await request(apiKey, apiSecret, 'POST', `form/${formId}/prepare`, data);
 
   if (!(body as ResponseBody).result) {
     throw new Error(JSON.stringify((body as ResponseBodyFailure).error_log));

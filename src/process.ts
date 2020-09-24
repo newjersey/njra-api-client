@@ -77,8 +77,8 @@ async function processApplication(application: Application): Promise<Response[]>
   return Promise.all(promises);
 }
 
-async function processBatch(offset: number): Promise<number> {
-  const response = await request('POST', `form/${FORM_ID}/pipeline`, {
+async function processBatch(apiKey: string, apiSecret: string, offset: number): Promise<number> {
+  const response = await request(apiKey, apiSecret, 'POST', `form/${FORM_ID}/pipeline`, {
     full_list: true,
     order_by: 'created_ts',
     order_by_direction: 'ASC',
@@ -99,13 +99,16 @@ async function processBatch(offset: number): Promise<number> {
 }
 
 async function main(): Promise<void> {
+  const API_KEY: string = config.get('seamless.api.documented.key');
+  const API_SECRET: string = config.get('seamless.api.documented.secret');
+
   let offset = START;
   let isComplete = false;
 
   try {
     do {
       console.log(`\nProcessing batch of ${LIMIT} starting at ${offset}...`);
-      const n = await processBatch(offset);
+      const n = await processBatch(API_KEY, API_SECRET, offset);
       offset += n;
       isComplete = n === 0;
     } while (!isComplete);
