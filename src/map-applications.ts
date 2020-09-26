@@ -32,11 +32,11 @@ async function mapBatch({
   let count = countStart;
 
   for (let i = 0; i < items.length; i++) {
-    if (typeof limit !== 'undefined' && count++ >= limit) {
+    if (typeof limit !== 'undefined' && count >= limit) {
       return 0;
     }
 
-    await mapFunc(items[i], offset + i, count);
+    await mapFunc(items[i], offset + i, ++count);
   }
 
   return items.length;
