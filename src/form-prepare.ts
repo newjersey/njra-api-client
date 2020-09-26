@@ -1,4 +1,3 @@
-import config from 'config';
 import { request } from './documented';
 import { getSigners } from './form-signers';
 
