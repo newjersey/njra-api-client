@@ -7,25 +7,18 @@ import {
   unassignSubmission,
 } from './undocumented';
 
-import Pipeline, { Application } from './Pipeline';
-import config from 'config';
-import { request } from './documented';
+import { Application } from './Pipeline';
 import { Response } from 'node-fetch';
 import { getEligibilityReviewer, getReceiver, REVIEWERS, OLD_RECEIVERS, OLD_ELIGIBILITY_REVIEWERS } from './users';
 import { INELIGIBILITIES } from './ineligibility';
-
-const START = 1000;
-const LIMIT = 2000; // max count, not max ID
-const FORM_ID: string = config.get('seamless.formId');
+import mapApplications from './map-applications';
 
 const eins: Set<string> = new Set();
-let count = 0;
-let n = START;
 
-async function processApplication(application: Application): Promise<Response[]> {
+const mapFunc = async (application: Application, offset: number, count: number): Promise<Response[]> => {
   const promises: Promise<Response>[] = [];
 
-  console.log(`${++count} (#${n++})`);
+  console.log(`${count} (#${offset})`);
 
   // determine eligibility
   const tags = INELIGIBILITIES.filter((ineligibility) => ineligibility.trigger(application, eins));
@@ -75,46 +68,10 @@ async function processApplication(application: Application): Promise<Response[]>
   }
 
   return Promise.all(promises);
-}
+};
 
-async function processBatch(apiKey: string, apiSecret: string, offset: number): Promise<number> {
-  const response = await request(apiKey, apiSecret, 'POST', `form/${FORM_ID}/pipeline`, {
-    full_list: true,
-    order_by: 'created_ts',
-    order_by_direction: 'ASC',
-    offset,
-  });
-  const pipeline = <Pipeline>response.body;
-  const { items } = pipeline;
-
-  for (let i = 0; i < items.length; i++) {
-    if (count >= LIMIT) {
-      return 0;
-    }
-
-    await processApplication(items[i]);
-  }
-
-  return items.length;
-}
-
-async function main(): Promise<void> {
-  const API_KEY: string = config.get('seamless.api.documented.key');
-  const API_SECRET: string = config.get('seamless.api.documented.secret');
-
-  let offset = START;
-  let isComplete = false;
-
-  try {
-    do {
-      console.log(`\nProcessing batch of ${LIMIT} starting at ${offset}...`);
-      const n = await processBatch(API_KEY, API_SECRET, offset);
-      offset += n;
-      isComplete = n === 0;
-    } while (!isComplete);
-  } catch (error) {
-    console.log('ERROR', error.message);
-  }
+function main() {
+  mapApplications({ start: 1000, limit: 2000, mapFunc });
 }
 
 main();
