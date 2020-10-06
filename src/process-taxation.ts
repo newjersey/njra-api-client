@@ -31,13 +31,13 @@ const mapFunc = async (application: Application, offset: number, count: number) 
   const log = (message: string) => {
     console.log(`${count} (#${offset}): ${appId} / ${ein} - ${message}`);
   };
-  const tag = (tagName: string) => {
-    associateTags(appId, [tagName]);
+  const tag = async (tagName: string) => {
+    await associateTags(appId, [tagName]);
   };
 
   if (!ein) {
     log('Missing EIN');
-    tag('Missing EIN');
+    await tag('Missing EIN');
   } else if (uniqueCleanInds.length === 0) {
     log(`****** No taxation entry, not even an X`);
   } else if (uniqueCleanInds.length > 1) {
@@ -47,15 +47,15 @@ const mapFunc = async (application: Application, offset: number, count: number) 
     switch (cleanInd) {
       case 'N':
         log('N');
-        tag('Taxation Dirty');
+        await tag('Taxation Dirty');
         break;
       case 'Y':
         log('Y');
-        tag('Taxation Clear');
+        await tag('Taxation Clear');
         break;
       case 'X':
         log('X');
-        tag('Unknown to Taxation');
+        await tag('Unknown to Taxation');
         break;
       default:
         log(`****** Unexpected clean ind: ${cleanInd}`);
