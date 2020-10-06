@@ -13,10 +13,12 @@ export enum USER_IDS {
   Kayla = 'BU20081000173559868',
   Angela = 'BU20081000171005904',
   Janet = 'BU20081000171005970',
+  Tiffany = 'BU20081000171005764',
+  Mark = 'forthcoming',
 }
 
 export const OLD_RECEIVERS = [USER_IDS.Jackie, USER_IDS.Diana, USER_IDS.Jarrett];
-export const RECEIVERS = [USER_IDS.Jackie, USER_IDS.Diana, USER_IDS.Kayla, USER_IDS.Angela];
+export const RECEIVERS = [USER_IDS.Diana, USER_IDS.Kayla, USER_IDS.Angela, USER_IDS.Tiffany];
 
 export const REVIEWERS = [USER_IDS.Darryl, USER_IDS.Jennell];
 
